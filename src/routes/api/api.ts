@@ -2,22 +2,39 @@ import express from 'express';
 import resizeImage from '../../function/function';
 
 const routes = express.Router();
+let filename: string;
 
-routes.get('/', (req, res) => {
-  const filename: string = req.query.filename as string;
-  const height: number = req.query.height as unknown as number;
-  const width: number = req.query.width as unknown as number;
-  if (filename == undefined || height == undefined || width == undefined) {
+routes.get('/', async (req, res) => {
+  res.status(200);
+  try {
+    // Query paremeters
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    filename = req.query.filename as string;
+    const height: number = req.query.height as unknown as number;
+    const width: number = req.query.width as unknown as number;
+
+    // When no query parameters are provided
+    if (filename == undefined || height == undefined || width == undefined) {
+      res.send(
+        'Please make sure to use queries with filename, height, and width'
+      );
+    } else {
+      // Resizing image
+      const outputImg = await resizeImage(
+        filename,
+        Number(height),
+        Number(width)
+      );
+      await sleep(250);
+      console.log(`Image is processed and is being retrieved.`);
+      // Sending image to client
+      res.sendFile(outputImg as string);
+    }
+  } catch (err) {
     res.send(
-      'Please make sure to provide filename, height, width, and try again.'
+      `image ${filename} was not found, please make sure to enter a correct image.`
     );
-  } else {
-    res.send('/api endpoint working');
-    console.log(`filename: ${req.query.filename}`);
-    console.log(`size: ${req.query.height}h x ${req.query.width}w`);
   }
-
-  resizeImage(filename, Number(height), Number(width));
 });
 
 export default routes;
