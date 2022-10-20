@@ -8,7 +8,9 @@
     "lint": "eslint .",
     "prettier": "prettier --config .prettierrc **/*.ts --write",
     "start": "node ./build/.",
-    "nodemon": "nodemon ./build/."
+    "nodemon": "nodemon ./build/.",
+    "jasmine": "jasmine",
+    "test": "npm run build && npm run jasmine"
   },
   "keywords": [],
   "author": "",
@@ -32,6 +34,7 @@
     "express": "^4.18.2",
     "fs": "^0.0.1-security",
     "jasmine": "^4.4.0",
+    "jasmine-spec-reporter": "^7.0.0",
     "path": "^0.12.7",
     "sharp": "^0.31.1",
     "supertest": "^6.3.0"

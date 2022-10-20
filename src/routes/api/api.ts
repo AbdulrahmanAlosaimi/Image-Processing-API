@@ -8,7 +8,6 @@ routes.get('/', async (req, res) => {
   res.status(200);
   try {
     // Query paremeters
-    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
     filename = req.query.filename as string;
     const height: number = req.query.height as unknown as number;
     const width: number = req.query.width as unknown as number;
@@ -25,8 +24,7 @@ routes.get('/', async (req, res) => {
         Number(height),
         Number(width)
       );
-      await sleep(250);
-      console.log(`Image is processed and is being retrieved.`);
+
       // Sending image to client
       res.sendFile(outputImg as string);
     }

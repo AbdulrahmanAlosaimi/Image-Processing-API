@@ -7,6 +7,7 @@ export default async function resizeImage(
   height: number,
   width: number
 ): Promise<string | Error> {
+  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
   // image path in input folder
   const inputPath = path.resolve(`./images/${file}.jpg`);
 
@@ -21,8 +22,11 @@ export default async function resizeImage(
       .toFile(path.resolve(`./output/${file}.jpg`), function (err) {
         if (err) console.log(err);
       });
+    console.log(`Image is processed and is being retrieved.`);
+    await sleep(250);
     return path.resolve(`./output/${file}.jpg`);
   } else {
+    console.log(`image ${file} was not found in images directory.`);
     // image not found in images folder
     return new Error(file);
   }
