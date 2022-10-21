@@ -7,27 +7,31 @@ export default async function resizeImage(
   height: number,
   width: number
 ): Promise<string | Error> {
-  const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
-  // image path in input folder
-  const inputPath = path.resolve(`./images/${file}.jpg`);
+  try {
+    const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+    // image path in input folder
+    const inputPath = path.resolve(`./images/${file}.jpg`);
 
-  // checking if image exists in output folder already
-  if (fs.existsSync(path.resolve(`./output/${file}.jpg`))) {
-    console.log(`Retrieving image from cache`);
-    return path.resolve(`./output/${file}.jpg`);
-    // checking if it's a correct image (present in images folder)
-  } else if (fs.existsSync(path.resolve(`./images/${file}.jpg`))) {
-    await sharp(inputPath)
-      .resize(height as number, width as number)
-      .toFile(path.resolve(`./output/${file}.jpg`), function (err) {
-        if (err) console.log(err);
-      });
-    console.log(`Image is processed and is being retrieved.`);
-    await sleep(250);
-    return path.resolve(`./output/${file}.jpg`);
-  } else {
-    console.log(`image ${file} was not found in images directory.`);
-    // image not found in images folder
-    return new Error(file);
+    // checking if image exists in output folder already
+    if (fs.existsSync(path.resolve(`./output/${file}.jpg`))) {
+      console.log(`Retrieving image from cache`);
+      return path.resolve(`./output/${file}.jpg`);
+      // checking if it's a correct image (present in images folder)
+    } else if (fs.existsSync(path.resolve(`./images/${file}.jpg`))) {
+      await sharp(inputPath)
+        .resize(height as number, width as number)
+        .toFile(path.resolve(`./output/${file}.jpg`), function (err) {
+          if (err) console.log(err);
+        });
+      console.log(`Image is processed and is being retrieved.`);
+      await sleep(250);
+      return path.resolve(`./output/${file}.jpg`);
+    } else {
+      console.log(`image ${file} was not found in images directory.`);
+      // image not found in images folder
+      return new Error(file);
+    }
+  } catch (err) {
+    return '------------------------TEST-----------------';
   }
 }
