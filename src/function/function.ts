@@ -13,19 +13,17 @@ export default async function resizeImage(
     const inputPath = path.resolve(`./images/${file}.jpg`);
 
     // checking if image exists in output folder already
-    if (fs.existsSync(path.resolve(`./output/${file}.jpg`))) {
+    if (fs.existsSync(path.resolve(`./output/${file}${height}x${width}.jpg`))) {
       console.log(`Retrieving image from cache`);
-      return path.resolve(`./output/${file}.jpg`);
+      return path.resolve(`./output/${file}${height}x${width}.jpg`);
       // checking if it's a correct image (present in images folder)
     } else if (fs.existsSync(path.resolve(`./images/${file}.jpg`))) {
       await sharp(inputPath)
         .resize(height as number, width as number)
-        .toFile(path.resolve(`./output/${file}.jpg`), function (err) {
-          if (err) console.log(err);
-        });
+        .toFile(path.resolve(`./output/${file}${height}x${width}.jpg`));
       console.log(`Image is processed and is being retrieved.`);
       await sleep(250);
-      return path.resolve(`./output/${file}.jpg`);
+      return path.resolve(`./output/${file}${height}x${width}.jpg`);
     } else {
       console.log(`image ${file} was not found in images directory.`);
       // image not found in images folder
